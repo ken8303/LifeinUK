@@ -1,6 +1,8 @@
 import type { Question, RunAnswer } from '../lib/types'
 import { LETTERS } from '../lib/format'
 import { IconCheck, IconCross, IconFlag, IconStar, Pill } from './ui'
+import { useApp } from '../lib/store'
+import { makeT, topicLabel } from '../lib/i18n'
 
 export type CardMode = 'instant' | 'locked' | 'review'
 
@@ -46,6 +48,9 @@ export function QuestionCard({
   showExplanation = true,
   register = 'app',
 }: Props) {
+  const { settings } = useApp()
+  const t = makeT(settings.lang)
+  const zh = settings.lang === 'zh'
   const revealed = mode === 'review' || (mode === 'instant' && answer.revealed)
   const need = q.correct_indices.length
   const exam = register === 'exam'
@@ -72,24 +77,24 @@ export function QuestionCard({
 
   return (
     <article
-      className={`question-card ${
+      className={
         exam
           ? 'bg-[var(--exam-body)] border border-[var(--exam-line)] rounded-[2px]'
           : 'bg-[var(--surface)] border border-[var(--line)] rounded-[3px]'
-      }`}
+      }
     >
       <header
-        className={`question-card-header flex items-start justify-between gap-6 px-6 pt-5 pb-4 border-b ${
+        className={`flex items-start justify-between gap-6 px-6 pt-5 pb-4 border-b ${
           exam ? 'border-[var(--exam-line)]' : 'border-[var(--line)]'
         }`}
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 mb-2">
-            <span className="eyebrow tnum">
-              Question {number} of {total}
+            <span className={`eyebrow tnum ${zh ? 'zh' : ''}`}>
+              {t('questionOf', { n: number, total })}
             </span>
-            {need > 1 ? <Pill tone="warn">Choose {need} answers</Pill> : null}
-            {!exam && q.topic ? <Pill>{q.topic}</Pill> : null}
+            {need > 1 ? <Pill tone="warn">{t('chooseAnswers', { n: need })}</Pill> : null}
+            {!exam && q.topic ? <Pill>{topicLabel(settings.lang, q.topic)}</Pill> : null}
           </div>
           <h1
             className={
@@ -98,7 +103,12 @@ export function QuestionCard({
                 : 'font-display text-[22px] leading-[1.35] text-[var(--ink)] max-w-[58ch]'
             }
           >
-            {q.question}
+            {zh && q.question_zh ? (
+              <>
+                <span className="block zh">{q.question_zh}</span>
+                <span className="block mt-2 text-[0.78em] leading-[1.45] text-[var(--muted)] font-sans">{q.question}</span>
+              </>
+            ) : q.question}
           </h1>
         </div>
 
@@ -116,7 +126,7 @@ export function QuestionCard({
               }`}
             >
               <IconStar filled={bookmarked} size={14} />
-              {bookmarked ? 'Saved' : 'Save'}
+              {bookmarked ? t('saved') : t('save')}
             </button>
           ) : null}
           {onFlag ? (
@@ -132,13 +142,13 @@ export function QuestionCard({
               }`}
             >
               <IconFlag filled={answer.flagged} size={14} />
-              {answer.flagged ? 'Flagged' : 'Flag'}
+              {answer.flagged ? t('flagged') : t('flag')}
             </button>
           ) : null}
         </div>
       </header>
 
-      <ul className="question-options flex flex-col gap-2 px-6 py-5" role="group" aria-label="Answer options">
+      <ul className="flex flex-col gap-2 px-6 py-5" role="group" aria-label="Answer options">
         {q.options.map((opt, i) => {
           const state = optionState(i, q, answer, revealed)
           const base =
@@ -160,7 +170,7 @@ export function QuestionCard({
                 onClick={() => toggle(i)}
                 disabled={revealed}
                 aria-pressed={answer.selected.includes(i)}
-                className={`answer-option ${base} ${tone} ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
+                className={`${base} ${tone} ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
               >
                 {/* status rail: solid = correct, hatched = incorrect */}
                 <span
@@ -177,7 +187,7 @@ export function QuestionCard({
                             : 'bg-transparent'
                   }`}
                 />
-                <span className="answer-option-inner flex items-start gap-3 px-3.5 py-3 flex-1">
+                <span className="flex items-start gap-3 px-3.5 py-3 flex-1">
                   <span
                     className={`mt-[1px] shrink-0 w-[22px] h-[22px] rounded-[2px] border font-mono text-[11.5px] font-semibold inline-flex items-center justify-center ${
                       state === 'right'
@@ -192,7 +202,7 @@ export function QuestionCard({
                     {LETTERS[i]}
                   </span>
                   <span
-                    className={`text-[14.5px] leading-[1.5] ${
+                    className={`answer-text min-w-0 flex-1 text-[14.5px] leading-[1.5] ${
                       state === 'right'
                         ? 'text-[var(--good)] font-medium'
                         : state === 'wrong'
@@ -200,7 +210,12 @@ export function QuestionCard({
                           : 'text-[var(--ink)]'
                     }`}
                   >
-                    {opt}
+                    {zh && q.options_zh?.[i] ? (
+                      <>
+                        <span className="block zh">{q.options_zh[i]}</span>
+                        <span className="block mt-1 text-[0.86em] leading-[1.4] text-[var(--muted)] font-sans">{opt}</span>
+                      </>
+                    ) : opt}
                   </span>
                   {revealed && state !== 'idle' ? (
                     <span
@@ -212,15 +227,15 @@ export function QuestionCard({
                     >
                       {state === 'right' ? (
                         <>
-                          <IconCheck size={14} /> Correct
+                          <IconCheck size={14} /> {t('correct')}
                         </>
                       ) : state === 'wrong' ? (
                         <>
-                          <IconCross size={14} /> Your answer
+                          <IconCross size={14} /> {t('yourAnswer')}
                         </>
                       ) : (
                         <>
-                          <IconCheck size={14} /> Correct answer
+                          <IconCheck size={14} /> {t('correct')} answer
                         </>
                       )}
                     </span>
@@ -234,7 +249,7 @@ export function QuestionCard({
 
       {revealed && showExplanation ? (
         <div
-          className={`question-explanation rise mx-6 mb-5 rounded-[2px] border px-4 py-3.5 ${
+          className={`rise mx-6 mb-5 rounded-[2px] border px-4 py-3.5 ${
             gotItRight
               ? 'border-[var(--good-line)] bg-[var(--good-wash)]'
               : 'border-[var(--bad-line)] bg-[var(--bad-wash)]'
@@ -246,10 +261,15 @@ export function QuestionCard({
             }`}
           >
             {gotItRight ? <IconCheck size={15} /> : <IconCross size={15} />}
-            {gotItRight ? 'Correct' : 'Not quite'}
+            {gotItRight ? t('correct') : t('notQuite')}
           </div>
-          <p className="mt-1.5 text-[13.5px] leading-[1.55] text-[var(--ink-2)] max-w-[70ch]">
-            {q.explanation}
+          <p className="mt-1.5 text-[13.5px] leading-[1.6] text-[var(--ink-2)] max-w-[70ch]">
+            {zh && q.explanation_zh ? (
+              <>
+                <span className="block zh">{q.explanation_zh}</span>
+                <span className="block mt-2 text-[0.92em] text-[var(--muted)] font-sans">{q.explanation}</span>
+              </>
+            ) : q.explanation}
           </p>
 
         </div>

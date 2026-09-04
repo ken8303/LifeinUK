@@ -6,6 +6,7 @@ import { useKeyboard } from '../lib/keyboard'
 import { QuestionCard } from './QuestionCard'
 import { RunSummary } from './RunSummary'
 import { Button, IconArrow, Kbd, Meter } from './ui'
+import { makeT } from '../lib/i18n'
 
 /**
  * The instant-feedback flow shared by Practice, Adaptive Mock and Weak Spots.
@@ -23,6 +24,7 @@ export function Runner({
   subtitle?: string
 }) {
   const { stats, settings } = useApp()
+  const t = makeT(settings.lang)
   const dispatch = useDispatch()
   const [confirmFinish, setConfirmFinish] = useState(false)
 
@@ -87,22 +89,22 @@ export function Runner({
 
   return (
     <div className="runner flex flex-col gap-4">
-      <header className="runner-header flex items-end justify-between gap-6">
+      <header className="flex items-end justify-between gap-6 runner-header">
         <div className="min-w-0">
-          <div className="eyebrow mb-1">{subtitle ?? 'Practice'}</div>
+          <div className={`eyebrow mb-1 ${settings.lang === 'zh' ? 'zh' : ''}`}>{subtitle ?? t('practice')}</div>
           <h1 className="font-display text-[26px] leading-tight text-[var(--ink)]">{run.label}</h1>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <span className="tnum font-mono text-[12.5px] text-muted">
-            {score}/{answered} correct
+            {t('correctCount', { a: score, b: answered })}
           </span>
           <Button variant="ghost" size="sm" onClick={onExit}>
-            {exitLabel}
+            {exitLabel === 'Back to tests' ? t('backToTests') : exitLabel === 'Leave run' ? t('leaveRun') : exitLabel === 'Back to Weak Spots' ? t('weakBack') : exitLabel}
           </Button>
         </div>
       </header>
 
-      <div className="runner-progress flex items-center gap-3">
+      <div className="flex items-center gap-3">
         <Meter value={answered / total} tone="accent" height={4} />
         <span className="tnum font-mono text-[11.5px] text-[var(--muted)] whitespace-nowrap">
           {answered}/{total}
@@ -121,12 +123,12 @@ export function Runner({
         showExplanation={settings.showExplanations}
       />
 
-      <nav className="runner-nav flex items-center justify-between gap-4">
+      <nav className="runner-actions flex items-center justify-between gap-4">
         <Button variant="secondary" onClick={() => go(run.index - 1)} disabled={run.index === 0}>
-          <IconArrow dir="left" size={14} /> Previous
+          <IconArrow dir="left" size={14} /> {t('previous')}
         </Button>
 
-        <ol className="question-jump flex flex-wrap items-center justify-center gap-[3px] max-w-[720px]">
+        <ol className="question-index flex flex-nowrap items-center justify-start gap-[5px] max-w-[720px] overflow-x-auto">
           {run.questionIds.map((id, i) => {
             const a = run.answers[id]
             const done = a?.revealed
@@ -158,23 +160,23 @@ export function Runner({
 
         {!answer?.revealed ? (
           <Button variant="primary" onClick={() => dispatch({ type: 'check', qid })} disabled={!ready}>
-            Submit answer
+            {t('submitAnswer')}
           </Button>
         ) : run.index === total - 1 ? (
           <Button
             variant="primary"
             onClick={() => (answered === total ? dispatch({ type: 'submit' }) : setConfirmFinish(true))}
           >
-            Finish and review <IconArrow size={14} />
+            {t('finishReview')} <IconArrow size={14} />
           </Button>
         ) : (
           <Button variant="primary" onClick={advance}>
-            Next <IconArrow size={14} />
+            {t('next')} <IconArrow size={14} />
           </Button>
         )}
       </nav>
 
-      <div className="keyboard-hints flex items-center gap-4 text-[11.5px] text-[var(--muted)] pt-1">
+      <div className="runner-hints flex items-center gap-4 text-[11.5px] text-[var(--muted)] pt-1">
         <span className="flex items-center gap-1.5">
           <Kbd>1</Kbd>–<Kbd>4</Kbd> or <Kbd>A</Kbd>–<Kbd>D</Kbd> choose
         </span>
@@ -200,17 +202,16 @@ export function Runner({
             className="bg-[var(--surface)] border border-[var(--line)] rounded-[3px] p-6 max-w-[420px] w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="font-display text-[20px] text-[var(--ink)]">Finish with questions left?</h2>
+            <h2 className={`font-display text-[20px] text-[var(--ink)] ${settings.lang === 'zh' ? 'zh' : ''}`}>{t('finishWithQuestionsLeft')}</h2>
             <p className="mt-2 text-[13.5px] text-[var(--muted)]">
-              {total - answered} of {total} questions are still unanswered. They will be marked as not
-              attempted and will not count towards your statistics.
+              {t('questionsStillUnanswered', { n: total - answered, total })}
             </p>
             <div className="flex justify-end gap-2 mt-5">
               <Button variant="ghost" onClick={() => setConfirmFinish(false)}>
-                Keep going
+                {t('keepGoing')}
               </Button>
               <Button variant="primary" onClick={() => dispatch({ type: 'submit' })}>
-                Finish now
+                {t('finishNow')}
               </Button>
             </div>
           </div>

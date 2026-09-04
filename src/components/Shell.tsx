@@ -42,7 +42,7 @@ export function Shell({ children }: { children: ReactNode }) {
     : null
 
   return (
-    <div className="app-shell min-h-screen flex bg-[var(--paper)]">
+    <div className={`min-h-screen flex bg-[var(--paper)] app-shell ${bleed ? 'exam-mode' : ''}`}>
       <aside className="desktop-sidebar w-[248px] shrink-0 border-r border-[var(--line)] bg-[var(--surface)] flex flex-col sticky top-0 h-screen">
         <div className="px-5 pt-6 pb-5 border-b border-[var(--line)]">
           <div className="flex items-center gap-2.5">
@@ -147,50 +147,39 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="app-main flex-1 min-w-0">
-        {bleed ? children : <div className="app-content max-w-[1120px] mx-auto px-8 py-8">{children}</div>}
-      </main>
-
-      <header className="mobile-header" aria-label="Life in the UK Trainer">
+      <div className="mobile-header">
         <div className="mobile-brand">
           <Crest />
           <div className="leading-tight">
-            <div className="font-display text-[16px] text-ink">Life in the UK</div>
+            <div className="font-display text-[18px] text-ink">Life in the UK</div>
             <div className="eyebrow">Trainer</div>
           </div>
         </div>
         <div className="mobile-language" role="group" aria-label="Language">
           {(['en', 'zh'] as const).map((code) => (
-            <button
-              key={code}
-              type="button"
-              onClick={() => dispatch({ type: 'settings', settings: { lang: code } })}
-              aria-pressed={settings.lang === code}
-              className={settings.lang === code ? 'active' : ''}
-            >
+            <button key={code} type="button" onClick={() => dispatch({ type: 'settings', settings: { lang: code } })}
+              aria-pressed={settings.lang === code} className={settings.lang === code ? 'active' : ''}>
               {code === 'en' ? 'EN' : '中'}
             </button>
           ))}
         </div>
-      </header>
-
+      </div>
+      <main className="flex-1 min-w-0 app-main">
+        {bleed ? children : <div className="max-w-[1120px] mx-auto px-8 py-8 mobile-main-inner">{children}</div>}
+      </main>
       <nav className="mobile-bottom-nav" aria-label="Sections">
         {NAV.map((item) => {
           const active = mode === item.key
           return (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => dispatch({ type: 'mode', mode: item.key })}
-              aria-current={active ? 'page' : undefined}
-              className={active ? 'active' : ''}
-            >
-              <span>{t(item.label)}</span>
-              {runMode === item.key ? <i aria-hidden="true" /> : null}
+            <button key={item.key} type="button" onClick={() => dispatch({ type: 'mode', mode: item.key })}
+              aria-current={active ? 'page' : undefined} className={active ? 'active' : ''}>
+              <span className={settings.lang === 'zh' ? 'zh' : ''}>{t(item.label)}</span>
+              {runMode === item.key ? <span className="mobile-run-dot" /> : null}
             </button>
           )
         })}
       </nav>
+
     </div>
   )
 }

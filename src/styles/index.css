@@ -309,356 +309,92 @@
 }
 
 
-/* ============================================================
-   Mobile layout
-   The original app used a 248px permanent desktop sidebar and
-   intentionally blocked screens below 1024px.  Keep that layout
-   on desktop, but switch to a proper single-column phone UI.
-   ============================================================ */
-
-.mobile-header,
-.mobile-bottom-nav {
-  display: none;
-}
+/* ---------- mobile application layout ---------- */
+.mobile-header, .mobile-bottom-nav { display: none; }
+.answer-text { color: var(--ink) !important; overflow-wrap: anywhere; }
 
 @media (max-width: 767px) {
-  html, body, #root {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  body {
-    font-size: 15px;
-    padding-bottom: calc(70px + env(safe-area-inset-bottom));
-  }
-
-  .app-shell {
-    display: block !important;
-    width: 100%;
-    min-height: 100dvh;
-  }
-
-  .desktop-sidebar {
-    display: none !important;
-  }
-
+  body { min-width: 0; overflow-x: hidden; }
+  .app-shell { display: block !important; min-height: 100dvh; }
+  .exam-mode .mobile-header, .exam-mode .mobile-bottom-nav { display: none !important; }
+  .exam-mode .app-main { padding-bottom: 0; }
+  .desktop-sidebar { display: none !important; }
   .mobile-header {
-    position: fixed;
-    z-index: 40;
-    inset: 0 0 auto 0;
-    height: 68px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 10px 14px;
-    padding-top: max(10px, env(safe-area-inset-top));
+    padding: calc(16px + env(safe-area-inset-top)) 16px 14px;
     background: var(--surface);
     border-bottom: 1px solid var(--line);
   }
-
-  .mobile-brand {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-  }
-
-  .mobile-brand svg {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 auto;
-  }
-
+  .mobile-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .mobile-brand svg { width: 34px; height: 34px; flex: 0 0 auto; }
   .mobile-language {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 3px;
-    border: 1px solid var(--line-strong);
-    border-radius: 4px;
+    display: flex; align-items: center; gap: 2px;
+    border: 1px solid var(--line-strong); border-radius: 4px; padding: 3px;
     flex: 0 0 auto;
   }
-
   .mobile-language button {
-    min-width: 43px;
-    min-height: 42px;
-    padding: 6px 9px;
-    border-radius: 3px;
-    font-weight: 700;
-    color: var(--muted);
+    min-width: 44px; min-height: 42px; padding: 6px 10px; border-radius: 3px;
+    font-size: 15px; font-weight: 700; color: var(--muted);
   }
-
-  .mobile-language button.active {
-    background: var(--surface-3);
-    color: var(--ink);
-  }
-
-  .app-main {
-    width: 100%;
-    min-width: 0;
-    padding-top: 68px;
-  }
-
-  .app-content {
-    width: 100%;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 18px 14px 28px !important;
-  }
-
-  /* Six navigation items fit comfortably on a phone. */
+  .mobile-language button.active { background: var(--surface-3); color: var(--ink); }
+  .app-main { width: 100%; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .mobile-main-inner { width: 100%; max-width: none !important; padding: 18px 14px 24px !important; }
   .mobile-bottom-nav {
-    position: fixed;
-    z-index: 50;
-    inset: auto 0 0 0;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    min-height: 64px;
-    padding: 4px 4px max(4px, env(safe-area-inset-bottom));
-    background: var(--surface);
-    border-top: 1px solid var(--line);
-    box-shadow: 0 -4px 16px rgb(0 0 0 / 0.10);
+    display: flex; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0;
+    padding: 5px 4px calc(5px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    border-top: 1px solid var(--line); backdrop-filter: blur(12px);
+    overflow-x: auto; overscroll-behavior-x: contain;
   }
-
   .mobile-bottom-nav button {
-    position: relative;
-    min-width: 0;
-    min-height: 54px;
-    padding: 7px 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 10.5px;
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--muted);
-    border-radius: 4px;
-    white-space: normal;
+    position: relative; flex: 1 0 86px; min-width: 76px; min-height: 58px;
+    padding: 7px 5px; border-radius: 5px; color: var(--muted); font-size: 12px; font-weight: 600;
   }
+  .mobile-bottom-nav button.active { background: var(--accent-wash); color: var(--accent); }
+  .mobile-run-dot { position: absolute; top: 5px; right: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); }
 
-  .mobile-bottom-nav button.active {
-    color: var(--accent);
-    background: var(--accent-wash);
-  }
+  .runner-header { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .runner-header h1 { font-size: 25px !important; }
+  .runner-actions { align-items: stretch; flex-wrap: wrap; gap: 10px; }
+  .runner-actions > button { flex: 1 1 145px; min-height: 46px; justify-content: center; }
+  .question-index { order: 3; flex: 1 0 100%; max-width: none !important; width: 100%; padding: 3px 2px 8px; scrollbar-width: thin; }
+  .question-index li { flex: 0 0 auto; }
+  .question-index button { width: 34px !important; height: 38px !important; font-size: 12px !important; }
+  .runner-hints { display: none; }
 
-  .mobile-bottom-nav button i {
-    position: absolute;
-    top: 5px;
-    right: calc(50% - 20px);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--warn);
-  }
+  .runner article header { flex-direction: column; gap: 10px; padding: 15px 14px 14px; }
+  .runner article header > div:last-child { width: 100%; justify-content: flex-start; }
+  .runner article header h1 { font-size: 23px !important; line-height: 1.4 !important; max-width: none !important; }
+  .runner article ul { padding: 14px; gap: 8px; }
+  .runner article ul button { min-height: 62px; }
+  .runner article ul button > span:nth-child(2) { padding: 12px 11px; gap: 10px; }
+  .runner article ul button .answer-text { font-size: 15px; line-height: 1.5; }
+  .runner article ul button .answer-text .zh { line-height: 1.65; }
+  .runner article ul button > span:nth-child(2) > span:last-child { white-space: normal; text-align: left; }
+  .runner article > div.rise { margin-left: 14px; margin-right: 14px; }
 
-  /* Page headings */
-  .app-content h1.font-display {
-    font-size: clamp(26px, 7vw, 32px);
-  }
+  .exam-page .bg-\[var\(--exam-chrome\)\] { padding-left: 14px !important; padding-right: 14px !important; }
+  .exam-page .bg-\[var\(--exam-bar\)\] { padding-left: 12px !important; padding-right: 12px !important; }
+  .exam-page .exam-content { padding: 12px !important; }
+  .exam-page .exam-content .max-w-\[860px\] { width: 100%; }
+  .exam-page .exam-content .flex.items-center.justify-between { flex-wrap: wrap; }
+  .exam-page .exam-content .flex.items-center.justify-between > span { display: none; }
+  .exam-page .exam-content .flex.items-center.justify-between > button { flex: 1 1 140px; min-height: 44px; justify-content: center; }
+  .exam-page .exam-content article header { padding: 14px; }
+  .exam-page .exam-content article header h1 { font-size: 19px !important; line-height: 1.5 !important; }
+  .exam-page .exam-content article > ul { padding: 12px; }
+  .exam-page .exam-content article > ul button { min-height: 64px; }
+  .exam-page .exam-content article > ul button .answer-text { font-size: 15px; }
 
-  /* Runner / practice questions */
-  .runner {
-    gap: 12px !important;
-  }
-
-  .runner-header {
-    align-items: flex-start !important;
-    gap: 10px !important;
-    flex-wrap: wrap;
-  }
-
-  .runner-header h1 {
-    font-size: 25px !important;
-    line-height: 1.12 !important;
-  }
-
-  .runner-header > div:last-child {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .runner-progress {
-    gap: 8px !important;
-  }
-
-  .runner-nav {
-    flex-wrap: wrap;
-    gap: 8px !important;
-  }
-
-  .runner-nav > button {
-    flex: 1 1 auto;
-    min-height: 44px;
-    min-width: 0;
-  }
-
-  .question-jump {
-    order: 3;
-    width: 100%;
-    max-width: none !important;
-    flex-wrap: nowrap !important;
-    justify-content: flex-start !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 3px 1px 6px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .question-jump::-webkit-scrollbar {
-    display: none;
-  }
-
-  .question-jump button {
-    flex: 0 0 30px;
-    width: 30px !important;
-    height: 30px !important;
-  }
-
-  .keyboard-hints {
-    display: none !important;
-  }
-
-  .question-card {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .question-card-header {
-    padding: 14px 14px 13px !important;
-    gap: 10px !important;
-    flex-wrap: wrap;
-  }
-
-  .question-card-header > div:first-child {
-    width: 100%;
-  }
-
-  .question-card-header > div:last-child {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .question-card-header h1 {
-    max-width: none !important;
-    font-size: 22px !important;
-    line-height: 1.32 !important;
-    overflow-wrap: anywhere;
-  }
-
-  .question-options {
-    padding: 13px 12px !important;
-    gap: 8px !important;
-  }
-
-  .answer-option {
-    min-height: 52px;
-  }
-
-  .answer-option-inner {
-    min-width: 0;
-    padding: 12px 10px !important;
-    gap: 10px !important;
-    align-items: flex-start !important;
-  }
-
-  .answer-option-inner > span:nth-child(2) {
-    min-width: 0;
-    overflow-wrap: anywhere;
-    font-size: 14.5px !important;
-  }
-
-  /* "Correct / Your answer" must not force a narrow phone layout wider. */
-  .answer-option-inner > span:last-child {
-    display: none !important;
-  }
-
-  .question-explanation {
-    margin-left: 12px !important;
-    margin-right: 12px !important;
-    margin-bottom: 13px !important;
-    padding: 12px !important;
-  }
-
-  /* Common responsive grids used by Dashboard, Practice, Analytics and
-     RunSummary. */
-  .grid.grid-cols-4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .grid.grid-cols-3 {
-    grid-template-columns: 1fr !important;
-  }
-
-  .grid.grid-cols-2 {
-    grid-template-columns: 1fr !important;
-  }
-
-  .grid.grid-cols-8 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .grid.grid-cols-\[1\.4fr_1fr\] {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Prevent fixed-width labels from crushing their neighbours. */
-  .w-\[128px\] {
-    width: auto !important;
-    min-width: 0 !important;
-  }
-
-  /* Tables become horizontally scrollable instead of stretching the page. */
-  table {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Dialogs and long exam content fit within the phone viewport. */
-  .fixed.inset-0 {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  /* Official exam: use the available phone width and allow vertical scrolling. */
-  .app-main > * {
-    max-width: 100%;
-  }
-
-  input, select, textarea, button {
-    max-width: 100%;
-  }
+  .grid.grid-cols-3, .grid.grid-cols-4, .grid.grid-cols-2 { grid-template-columns: 1fr !important; }
+  .grid.grid-cols-\[1\.4fr_1fr\] { grid-template-columns: 1fr !important; }
+  .flex.gap-8 { gap: 12px !important; }
+  .mobile-main-inner h1 { overflow-wrap: anywhere; }
 }
 
-/* Small phones such as iPhone SE */
-@media (max-width: 380px) {
-  .mobile-header {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .mobile-brand .font-display {
-    font-size: 14px !important;
-  }
-
-  .mobile-bottom-nav button {
-    font-size: 9.5px;
-  }
-
-  .app-content {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-
-  .question-card-header h1 {
-    font-size: 20px !important;
-  }
+@media (min-width: 768px) and (max-width: 1100px) {
+  .desktop-sidebar { width: 210px !important; }
 }

@@ -9,7 +9,6 @@ import { WeakSpots } from './modes/WeakSpots'
 
 export default function App() {
   const { mode } = useApp()
-
   return (
     <Shell>
       {mode === 'dashboard' ? <Dashboard /> : null}

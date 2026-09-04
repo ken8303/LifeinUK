@@ -3,10 +3,9 @@ import type { Settings } from './types'
 export type Lang = Settings['lang']
 
 /**
- * Interface chrome only. Everything inside a live run — the question card, the
- * answer options, Submit / Next / Previous, the exam screen and the post-run
- * summary — stays in English on purpose, because that is the language of the
- * real test.
+ * Interface strings are bilingual. When Traditional Chinese is selected,
+ * questions, answers, explanations and the live exam controls are shown in
+ * Chinese with English retained underneath where useful.
  */
 const UI = {
   /* sidebar */
@@ -232,6 +231,42 @@ const UI = {
   seenWord: ['seen', '已看'],
   fewerErrors: ['Fewer errors', '較少答錯'],
   moreErrors: ['More errors', '較多答錯'],
+  questionOf: ['Question {n} of {total}', '第 {n} 題／共 {total} 題'],
+  chooseAnswers: ['Choose {n} answers', '請選擇 {n} 個答案'],
+  save: ['Save', '收藏'],
+  saved: ['Saved', '已收藏'],
+  flag: ['Flag', '標記'],
+  flagged: ['Flagged', '已標記'],
+  correct: ['Correct', '正確'],
+  yourAnswer: ['Your answer', '你的答案'],
+  correctAnswer: ['Correct answer', '正確答案'],
+  notQuite: ['Not quite', '不完全正確'],
+  previous: ['Previous', '上一題'],
+  submitAnswer: ['Submit answer', '提交答案'],
+  next: ['Next', '下一題'],
+  finishReview: ['Finish and review', '完成並查看結果'],
+  backToTests: ['Back to tests', '返回測驗'],
+  leaveRun: ['Leave run', '離開練習'],
+  weakBack: ['Back to Weak Spots', '返回弱項題庫'],
+  correctCount: ['{a}/{b} correct', '{a}/{b} 正確'],
+  finishWithQuestionsLeft: ['Finish with questions left?', '仍有題目未作答，確定完成？'],
+  questionsStillUnanswered: ['{n} of {total} questions are still unanswered. They will be marked as not attempted and will not count towards your statistics.', '仍有 {n}／{total} 題未作答。這些題目會標記為未作答，不會計入你的統計。'],
+  keepGoing: ['Keep going', '繼續作答'],
+  finishNow: ['Finish now', '現在完成'],
+  submitTest: ['Submit test', '提交測驗'],
+  reviewAll: ['Review all', '查看全部'],
+  reviewAnswers: ['Review answers', '查看答案'],
+  simulatedSitting: ['Simulated sitting', '模擬考試'],
+  underFiveMinutes: ['Under five minutes remaining. The paper submits itself when the clock reaches zero.', '剩餘不足五分鐘。時間到零時，試卷會自動提交。'],
+  answered: ['answered', '已作答'],
+  leftBlank: ['left blank', '未作答'],
+  flaggedForReview: ['flagged', '已標記'],
+  questionSummary: ['Question summary', '題目摘要'],
+  backToPaper: ['Back to the paper', '返回試卷'],
+  submitYourTest: ['Submit your test?', '確定提交測驗？'],
+  keepWorking: ['Keep working', '繼續作答'],
+  submitAndMark: ['Submit and mark', '提交並批改'],
+  allAnswered: ['All 24 questions are answered.', '24 題全部已作答。'],
   notAttempted: ['Not attempted', '未作答'],
   savedToWeak: ['Saved to Weak Spots', '已收藏至弱項'],
   emptyNoteExams: ['Nothing attempted yet.', '尚未作答。'],

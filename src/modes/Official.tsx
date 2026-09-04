@@ -137,7 +137,8 @@ function Setup() {
 /* ------------------------------------------------------------------- exam */
 
 function Exam() {
-  const { run, stats } = useApp()
+  const { run, stats, settings } = useApp()
+  const t = makeT(settings.lang)
   const dispatch = useDispatch()
   const [showGrid, setShowGrid] = useState(false)
   const [confirm, setConfirm] = useState(false)
@@ -193,14 +194,14 @@ function Exam() {
   if (!question) return null
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col exam-page">
       {/* chrome: deliberately plainer than the rest of the app */}
       <div className="bg-[var(--exam-chrome)] border-b border-[var(--exam-line)] px-8 py-3 flex items-center justify-between">
         <div className="flex items-baseline gap-3">
           <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--exam-ink)]">
             Life in the UK Test
           </span>
-          <span className="text-[12px] text-[var(--muted)]">Simulated sitting</span>
+          <span className="text-[12px] text-[var(--muted)]">{t('simulatedSitting')}</span>
         </div>
         <div
           className={`flex items-center gap-2 font-mono tnum text-[17px] font-semibold px-3 py-1 rounded-[2px] border ${
@@ -220,31 +221,31 @@ function Exam() {
 
       {low ? (
         <div className="bg-[var(--bad-wash)] border-b border-[var(--bad-line)] px-8 py-2 text-[12.5px] text-[var(--bad)] font-medium">
-          Under five minutes remaining. The paper submits itself when the clock reaches zero.
+          {t('underFiveMinutes')}
         </div>
       ) : null}
 
       <div className="bg-[var(--exam-bar)] border-b border-[var(--exam-line)] px-8 py-2 flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 text-[12.5px] text-[var(--exam-ink)]">
           <span className="tnum font-mono font-semibold">
-            Question {run!.index + 1} of {total}
+            {t('questionOf', { n: run!.index + 1, total })}
           </span>
-          <span className="text-[var(--muted)] tnum">{answeredCount} answered</span>
+          <span className="text-[var(--muted)] tnum">{answeredCount} {t('answered')}</span>
           <span className="text-[var(--muted)] tnum flex items-center gap-1">
-            <IconFlag size={12} /> {flaggedCount} flagged
+            <IconFlag size={12} /> {flaggedCount} {t('flaggedForReview')}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary" size="sm" onClick={() => setShowGrid(true)}>
-            <IconGrid size={14} /> Review all
+            <IconGrid size={14} /> {t('reviewAll')}
           </Button>
           <Button variant="primary" size="sm" onClick={() => setConfirm(true)}>
-            Submit test
+            {t('submitTest')}
           </Button>
         </div>
       </div>
 
-      <div className="px-8 py-6 bg-[var(--paper)] flex-1">
+      <div className="exam-content px-8 py-6 bg-[var(--paper)] flex-1">
         <div className="max-w-[860px] mx-auto flex flex-col gap-4">
           <QuestionCard
             question={question}
@@ -260,7 +261,7 @@ function Exam() {
 
           <div className="flex items-center justify-between gap-3">
             <Button variant="secondary" onClick={() => go(run!.index - 1)} disabled={run!.index === 0}>
-              <IconArrow dir="left" size={14} /> Previous
+              <IconArrow dir="left" size={14} /> {t('previous')}
             </Button>
             <span className="text-[11.5px] text-[var(--muted)] flex items-center gap-2">
               <Kbd>1</Kbd>–<Kbd>4</Kbd> answer · <Kbd>F</Kbd> flag · <Kbd>R</Kbd> review · <Kbd>Enter</Kbd> next
@@ -269,7 +270,7 @@ function Exam() {
               variant="primary"
               onClick={() => (run!.index === total - 1 ? setShowGrid(true) : go(run!.index + 1))}
             >
-              {run!.index === total - 1 ? 'Review answers' : 'Next'} <IconArrow size={14} />
+              {run!.index === total - 1 ? t('reviewAnswers') : t('next')} <IconArrow size={14} />
             </Button>
           </div>
         </div>
@@ -313,7 +314,8 @@ function ReviewGrid({
   onPick: (i: number) => void
   onSubmit: () => void
 }) {
-  const { run } = useApp()
+  const { run, settings } = useApp()
+  const t = makeT(settings.lang)
   const ids = run!.questionIds
   const answered = ids.filter((id) => run!.answers[id]?.selected.length).length
   const flagged = ids.filter((id) => run!.answers[id]?.flagged).length
@@ -331,9 +333,9 @@ function ReviewGrid({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-[var(--exam-chrome)] border-b border-[var(--exam-line)] px-5 py-3">
-          <h2 className="text-[15px] font-semibold text-[var(--exam-ink)]">Question summary</h2>
+          <h2 className={`text-[15px] font-semibold text-[var(--exam-ink)] ${settings.lang === 'zh' ? 'zh' : ''}`}>{t('questionSummary')}</h2>
           <p className="text-[12px] text-[var(--muted)] mt-0.5 tnum">
-            {answered} of {ids.length} answered · {flagged} flagged · {ids.length - answered} left blank
+            {answered} {t('answered')} · {flagged} {t('flaggedForReview')} · {ids.length - answered} {t('leftBlank')}
           </p>
         </div>
 
@@ -386,10 +388,10 @@ function ReviewGrid({
 
         <div className="border-t border-[var(--exam-line)] px-5 py-3.5 flex justify-between gap-2">
           <Button variant="secondary" onClick={onClose}>
-            Back to the paper
+            {t('backToPaper')}
           </Button>
           <Button variant="primary" onClick={onSubmit}>
-            Submit test
+            {t('submitTest')}
           </Button>
         </div>
       </div>
@@ -410,6 +412,8 @@ function ConfirmSubmit({
   onCancel: () => void
   onConfirm: () => void
 }) {
+  const { settings } = useApp()
+  const t = makeT(settings.lang)
   const blank = total - answered
   return (
     <div
@@ -422,20 +426,22 @@ function ConfirmSubmit({
         className="bg-[var(--surface)] border border-[var(--line)] rounded-[3px] p-6 max-w-[440px] w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="font-display text-[21px] text-[var(--ink)]">Submit your test?</h2>
+        <h2 className={`font-display text-[21px] text-[var(--ink)] ${settings.lang === 'zh' ? 'zh' : ''}`}>{t('submitYourTest')}</h2>
         <p className="mt-2 text-[13.5px] text-[var(--muted)]">
           {blank > 0
-            ? `${blank} question${blank === 1 ? ' is' : 's are'} still blank and will be marked wrong.`
-            : 'All 24 questions are answered.'}
-          {flagged > 0 ? ` You still have ${flagged} flagged for review.` : ''}
-          {' '}You cannot change anything once the paper is submitted.
+            ? (settings.lang === 'zh'
+                ? `${blank} 題仍未作答，提交後會計為錯誤。`
+                : `${blank} question${blank === 1 ? ' is' : 's are'} still blank and will be marked wrong.`)
+            : t('allAnswered')}
+          {flagged > 0 ? (settings.lang === 'zh' ? ` 仍有 ${flagged} 題已標記待覆核。` : ` You still have ${flagged} flagged for review.`) : ''}
+          {' '}{settings.lang === 'zh' ? '提交後不能再修改答案。' : 'You cannot change anything once the paper is submitted.'}
         </p>
         <div className="flex justify-end gap-2 mt-5">
           <Button variant="ghost" onClick={onCancel}>
-            Keep working
+            {t('keepWorking')}
           </Button>
           <Button variant="primary" onClick={onConfirm}>
-            Submit and mark
+            {t('submitAndMark')}
           </Button>
         </div>
       </div>
