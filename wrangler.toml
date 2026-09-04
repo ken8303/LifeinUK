@@ -1,0 +1,5 @@
+name = "life-in-the-uk-trainer"
+compatibility_date = "2026-09-04"
+
+[assets]
+directory = "./dist"

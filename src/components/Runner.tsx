@@ -86,8 +86,8 @@ export function Runner({
   if (!question) return null
 
   return (
-    <div className="flex flex-col gap-4">
-      <header className="flex items-end justify-between gap-6">
+    <div className="runner flex flex-col gap-4">
+      <header className="runner-header flex items-end justify-between gap-6">
         <div className="min-w-0">
           <div className="eyebrow mb-1">{subtitle ?? 'Practice'}</div>
           <h1 className="font-display text-[26px] leading-tight text-[var(--ink)]">{run.label}</h1>
@@ -102,7 +102,7 @@ export function Runner({
         </div>
       </header>
 
-      <div className="flex items-center gap-3">
+      <div className="runner-progress flex items-center gap-3">
         <Meter value={answered / total} tone="accent" height={4} />
         <span className="tnum font-mono text-[11.5px] text-[var(--muted)] whitespace-nowrap">
           {answered}/{total}
@@ -121,12 +121,12 @@ export function Runner({
         showExplanation={settings.showExplanations}
       />
 
-      <nav className="flex items-center justify-between gap-4">
+      <nav className="runner-nav flex items-center justify-between gap-4">
         <Button variant="secondary" onClick={() => go(run.index - 1)} disabled={run.index === 0}>
           <IconArrow dir="left" size={14} /> Previous
         </Button>
 
-        <ol className="flex flex-wrap items-center justify-center gap-[3px] max-w-[720px]">
+        <ol className="question-jump flex flex-wrap items-center justify-center gap-[3px] max-w-[720px]">
           {run.questionIds.map((id, i) => {
             const a = run.answers[id]
             const done = a?.revealed
@@ -174,7 +174,7 @@ export function Runner({
         )}
       </nav>
 
-      <div className="flex items-center gap-4 text-[11.5px] text-[var(--muted)] pt-1">
+      <div className="keyboard-hints flex items-center gap-4 text-[11.5px] text-[var(--muted)] pt-1">
         <span className="flex items-center gap-1.5">
           <Kbd>1</Kbd>–<Kbd>4</Kbd> or <Kbd>A</Kbd>–<Kbd>D</Kbd> choose
         </span>

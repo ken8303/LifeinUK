@@ -72,14 +72,14 @@ export function QuestionCard({
 
   return (
     <article
-      className={
+      className={`question-card ${
         exam
           ? 'bg-[var(--exam-body)] border border-[var(--exam-line)] rounded-[2px]'
           : 'bg-[var(--surface)] border border-[var(--line)] rounded-[3px]'
-      }
+      }`}
     >
       <header
-        className={`flex items-start justify-between gap-6 px-6 pt-5 pb-4 border-b ${
+        className={`question-card-header flex items-start justify-between gap-6 px-6 pt-5 pb-4 border-b ${
           exam ? 'border-[var(--exam-line)]' : 'border-[var(--line)]'
         }`}
       >
@@ -138,7 +138,7 @@ export function QuestionCard({
         </div>
       </header>
 
-      <ul className="flex flex-col gap-2 px-6 py-5" role="group" aria-label="Answer options">
+      <ul className="question-options flex flex-col gap-2 px-6 py-5" role="group" aria-label="Answer options">
         {q.options.map((opt, i) => {
           const state = optionState(i, q, answer, revealed)
           const base =
@@ -160,7 +160,7 @@ export function QuestionCard({
                 onClick={() => toggle(i)}
                 disabled={revealed}
                 aria-pressed={answer.selected.includes(i)}
-                className={`${base} ${tone} ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
+                className={`answer-option ${base} ${tone} ${revealed ? 'cursor-default' : 'cursor-pointer'}`}
               >
                 {/* status rail: solid = correct, hatched = incorrect */}
                 <span
@@ -177,7 +177,7 @@ export function QuestionCard({
                             : 'bg-transparent'
                   }`}
                 />
-                <span className="flex items-start gap-3 px-3.5 py-3 flex-1">
+                <span className="answer-option-inner flex items-start gap-3 px-3.5 py-3 flex-1">
                   <span
                     className={`mt-[1px] shrink-0 w-[22px] h-[22px] rounded-[2px] border font-mono text-[11.5px] font-semibold inline-flex items-center justify-center ${
                       state === 'right'
@@ -234,7 +234,7 @@ export function QuestionCard({
 
       {revealed && showExplanation ? (
         <div
-          className={`rise mx-6 mb-5 rounded-[2px] border px-4 py-3.5 ${
+          className={`question-explanation rise mx-6 mb-5 rounded-[2px] border px-4 py-3.5 ${
             gotItRight
               ? 'border-[var(--good-line)] bg-[var(--good-wash)]'
               : 'border-[var(--bad-line)] bg-[var(--bad-wash)]'
