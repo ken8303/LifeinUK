@@ -1,0 +1,11 @@
+{
+  "name": "Life in the UK Trainer",
+  "short_name": "UK Trainer",
+  "description": "Life in the UK test practice with 408 questions and mock exams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F5F7",
+  "theme_color": "#0B2E6F",
+  "lang": "en-GB",
+  "icons": []
+}

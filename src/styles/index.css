@@ -1,0 +1,417 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Life in the UK Trainer — design tokens
+   Direction: British civic. Union/passport navy, cool paper
+   neutral biased toward the accent, square geometry, hairlines.
+   ============================================================ */
+
+:root {
+  /* surfaces */
+  --paper:        #F4F5F7;
+  --surface:      #FFFFFF;
+  --surface-2:    #EDEFF3;
+  --surface-3:    #E3E7EC;
+  --line:         #D7DBE2;
+  --line-strong:  #B9C0CB;
+
+  /* ink */
+  --ink:          #0B1220;
+  --ink-2:        #3B465A;
+  --muted:        #5A6474;
+  --faint:        #8A93A3;
+
+  /* brand */
+  --accent:       #0B2E6F;
+  --accent-hover: #123C8C;
+  --accent-ink:   #FFFFFF;
+  --accent-wash:  #E8EDF8;
+  --focus:        #FFC845;
+
+  /* primary action buttons: charcoal, so the label is unmistakable */
+  --btn:          #16181D;
+  --btn-hover:    #2C313B;
+  --btn-ink:      #FFFFFF;
+
+  /* status */
+  --good:         #1E7A44;
+  --good-wash:    #E7F3EC;
+  --good-line:    #A6D2B8;
+  --bad:          #B3223B;
+  --bad-wash:     #FBEBEE;
+  --bad-line:     #E8B3BE;
+  --warn:         #8A5200;
+  --warn-wash:    #FCF2E2;
+  --warn-line:    #E5C68C;
+
+  /* sequential error ramp (pale -> deep), lightness-monotonic */
+  --heat-0:       #EEF1F5;
+  --heat-1:       #FBE9EC;
+  --heat-2:       #F3C2CB;
+  --heat-3:       #E38A9C;
+  --heat-4:       #C9445F;
+  --heat-5:       #98122E;
+  --heat-ink-lo:  #0B1220;
+  --heat-ink-hi:  #FFFFFF;
+
+  /* official exam chrome — deliberately plainer than the app */
+  --exam-chrome:  #E9EAEC;
+  --exam-bar:     #D6D8DC;
+  --exam-line:    #B4B8BF;
+  --exam-body:    #FFFFFF;
+  --exam-ink:     #16191F;
+
+  --shadow: 0 1px 2px rgb(11 18 32 / 0.06), 0 4px 14px rgb(11 18 32 / 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:        #0E1117;
+    --surface:      #161B24;
+    --surface-2:    #1D2430;
+    --surface-3:    #262F3D;
+    --line:         #2B3442;
+    --line-strong:  #3C4757;
+
+    --ink:          #E7EAF0;
+    --ink-2:        #C2C9D5;
+    --muted:        #98A2B3;
+    --faint:        #6F7A8A;
+
+    --accent:       #8FADF5;
+    --accent-hover: #A9C0FA;
+    --accent-ink:   #0B1220;
+    --accent-wash:  #1B2740;
+    --focus:        #FFC845;
+
+    --btn:          #E9ECF2;
+    --btn-hover:    #FFFFFF;
+    --btn-ink:      #0B1220;
+
+    --good:         #4FC77F;
+    --good-wash:    #12291D;
+    --good-line:    #2A5C3E;
+    --bad:          #F2637C;
+    --bad-wash:     #2C141A;
+    --bad-line:     #6B2836;
+    --warn:         #E0A33E;
+    --warn-wash:    #2A2113;
+    --warn-line:    #5E4720;
+
+    --heat-0:       #1C222C;
+    --heat-1:       #3A2027;
+    --heat-2:       #5A2733;
+    --heat-3:       #8A3245;
+    --heat-4:       #C24A63;
+    --heat-5:       #F2637C;
+    --heat-ink-lo:  #E7EAF0;
+    --heat-ink-hi:  #1A0A0E;
+
+    --exam-chrome:  #1E232C;
+    --exam-bar:     #262C36;
+    --exam-line:    #3A424F;
+    --exam-body:    #12161D;
+    --exam-ink:     #E7EAF0;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px rgb(0 0 0 / 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:        #0E1117;
+  --surface:      #161B24;
+  --surface-2:    #1D2430;
+  --surface-3:    #262F3D;
+  --line:         #2B3442;
+  --line-strong:  #3C4757;
+
+  --ink:          #E7EAF0;
+  --ink-2:        #C2C9D5;
+  --muted:        #98A2B3;
+  --faint:        #6F7A8A;
+
+  --accent:       #8FADF5;
+  --accent-hover: #A9C0FA;
+  --accent-ink:   #0B1220;
+  --accent-wash:  #1B2740;
+  --focus:        #FFC845;
+
+  --btn:          #E9ECF2;
+  --btn-hover:    #FFFFFF;
+  --btn-ink:      #0B1220;
+
+  --good:         #4FC77F;
+  --good-wash:    #12291D;
+  --good-line:    #2A5C3E;
+  --bad:          #F2637C;
+  --bad-wash:     #2C141A;
+  --bad-line:     #6B2836;
+  --warn:         #E0A33E;
+  --warn-wash:    #2A2113;
+  --warn-line:    #5E4720;
+
+  --heat-0:       #1C222C;
+  --heat-1:       #3A2027;
+  --heat-2:       #5A2733;
+  --heat-3:       #8A3245;
+  --heat-4:       #C24A63;
+  --heat-5:       #F2637C;
+  --heat-ink-lo:  #E7EAF0;
+  --heat-ink-hi:  #1A0A0E;
+
+  --exam-chrome:  #1E232C;
+  --exam-bar:     #262C36;
+  --exam-line:    #3A424F;
+  --exam-body:    #12161D;
+  --exam-ink:     #E7EAF0;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px rgb(0 0 0 / 0.35);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-wash: var(--accent-wash);
+  --color-btn: var(--btn);
+  --color-btn-hover: var(--btn-hover);
+  --color-btn-ink: var(--btn-ink);
+  --color-good: var(--good);
+  --color-good-wash: var(--good-wash);
+  --color-good-line: var(--good-line);
+  --color-bad: var(--bad);
+  --color-bad-wash: var(--bad-wash);
+  --color-bad-line: var(--bad-line);
+  --color-warn: var(--warn);
+  --color-warn-wash: var(--warn-wash);
+  --color-warn-line: var(--warn-line);
+  --color-exam-chrome: var(--exam-chrome);
+  --color-exam-bar: var(--exam-bar);
+  --color-exam-line: var(--exam-line);
+  --color-exam-body: var(--exam-body);
+  --color-exam-ink: var(--exam-ink);
+
+  /* Latin glyphs come from the Google faces; CJK glyphs fall through to the
+     reader's own system Chinese font, so no webfont is needed for 繁體中文. */
+  --font-display: "Libre Caslon Display", "Hoefler Text", Georgia, "PingFang TC",
+    "PingFang HK", "Microsoft JhengHei", "Noto Serif CJK TC", serif;
+  --font-sans: "Public Sans", "Helvetica Neue", Helvetica, Arial, "PingFang TC",
+    "PingFang HK", "Heiti TC", "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, Consolas,
+    "PingFang TC", "Microsoft JhengHei", monospace;
+
+  --radius-none: 0px;
+}
+
+/* ---------- base ----------
+   These MUST live in @layer base. Unlayered CSS outranks anything inside a
+   layer no matter the specificity, so an unlayered `button { color: inherit }`
+   silently beats every Tailwind text-colour utility applied to a button. */
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  button {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  ::selection { background: var(--focus); color: #0B1220; }
+
+  * { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+}
+
+@layer components {
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* hatched fill — secondary (non-colour) encoding for "incorrect" */
+  .hatch-bad {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--bad) 0 2px,
+      transparent 2px 5px
+    );
+  }
+}
+
+@keyframes tick-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+.low-time { animation: tick-pulse 1.1s ease-in-out infinite; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+.rise { animation: rise 180ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Traditional Chinese uses the reader's own system CJK face — no webfont, so it
+   works offline and adds nothing to the bundle. */
+.zh {
+  font-family: "PingFang TC", "PingFang HK", "Heiti TC", "Microsoft JhengHei",
+    "Noto Sans CJK TC", "Noto Sans TC", "Hiragino Sans CNS", sans-serif;
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   Mobile-first overrides
+   The original trainer was intentionally desktop-only. These
+   rules keep the desktop design but make the complete app usable
+   on phones and tablets.
+   ============================================================ */
+html, body, #root {
+  width: 100%;
+  min-width: 0;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+@media (max-width: 767px) {
+  .shell,
+  main,
+  [class*="max-w-"] {
+    max-width: 100% !important;
+  }
+
+  /* Give the app breathing room around phone safe areas. */
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Prevent fixed/absolute controls from causing horizontal overflow. */
+  [class*="overflow-x-auto"] {
+    scrollbar-width: none;
+  }
+  [class*="overflow-x-auto"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Cards and content become edge-to-edge with small gutters. */
+  [class*="rounded"], [class*="border"] {
+    max-width: 100%;
+  }
+
+  /* Comfortable touch targets. */
+  button:not([aria-label="Close"]),
+  [role="button"] {
+    min-height: 44px;
+  }
+
+  /* Keep question text readable without zooming. */
+  p, li {
+    overflow-wrap: anywhere;
+  }
+
+  /* Exam runner: stack controls vertically on narrow screens. */
+  .exam-grid,
+  .question-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables/statistics can scroll rather than break the viewport. */
+  table {
+    min-width: 560px;
+  }
+
+  /* Common responsive utility patterns used by the app. */
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Make large headings scale naturally on phones. */
+  h1 {
+    font-size: clamp(1.55rem, 7vw, 2.2rem) !important;
+    line-height: 1.15;
+  }
+
+  /* Horizontal navigation should scroll instead of wrap awkwardly. */
+  nav, [role="tablist"] {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* iOS standalone/PWA support. */
+@supports (-webkit-touch-callout: none) {
+  input, button, select, textarea {
+    font-size: 16px;
+  }
+}
